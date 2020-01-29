@@ -12,16 +12,32 @@
 
 NAME = fillit
 
+SRC = bloc.c\
+      check.c\
+      coordn.c\
+      get_next_line.c\
+      init.c\
+      main.c\
+      math.c\
+      solve.c
+OBJ = $(SRC:.c=.o)
+FLAGS = -Wall -Wextra -Werror
+
 all: $(NAME)
 
-$(NAME):
-	@gcc -c -Werror -Wextra -Wall *.c -I ./libft/*.c
-	@gcc -o fillit -Werror -Wextra -Wall *.o
+$(NAME): $(OBJ)
+	@make -C libft
+	@gcc $(FLAGS) $+ -o $@ -lft -L libft -I libft
 
+$(OBJ): %.o: %.c
+	gcc $(FLAGS) -c $< -o $@
 clean:
+	@make clean -C libft
 	@rm -f *.o
 
 fclean: clean
+	@make fclean -C libft
 	@rm -f $(NAME)
 
 re: fclean all
+.PHONY: all, re, clean, fclean
